@@ -1,14 +1,76 @@
 # DATA CLEANING - D206
 
-David Rusho
+David Rusho </br>
+Student ID: 012037553</br>
+<drusho@wgu.edu></br>
 
 ---
 
 ## Part I: Research Question
 
 A.  Describe one question or decision that could be addressed using the data set you chose. The summarized question or decision must be relevant to a realistic organizational need or situation.
+The dataset that was chosen for this assignment was "medical_raw_data.csv." This dataset comes from a hospital chain and includes information on patients' conditions, demographics, and treatments. The dataset does not include the original reason for hospitalization.  
+
+One question that could be addressed using this dataset is to determine what factors that patient with high rates of readmission have in common.
 
 B.  Describe all variables in the data set (regardless of the research question) and indicate the data type for each variable. Use examples from the data set to support your claims.
+
+Dataset variables and data types for medical_raw_data.csv.
+| Column Name | Data Type | Description |
+|---|---|---|
+| Unnamed: 0 | int64 | |
+| CaseOrder | int64 | |
+| Customer_id | object | |
+| Interaction | object | |
+| UID | object | |
+| City | object | |
+| State | object | |
+| County | object | |
+| Zip | int64 | |
+| Lat | float64 | |
+| Lng | float64 | |
+| Population | int64 | |
+| Area | object | |
+| Timezone | object | |
+| Job | object | |
+| Children | float64 | |
+| Age | float64 | |
+| Education | object | |
+| Employment | object | |
+| Income | float64 | |
+| Marital | object | |
+| Gender | object | |
+| ReAdmis | object | |
+| VitD_levels | float64 | |
+| Doc_visits | int64 | |
+| Full_meals_eaten | int64 | |
+| VitD_supp | int64 | |
+| Soft_drink | object | |
+| Initial_admin | object | |
+| HighBlood | object | |
+| Stroke | object | |
+| Complication_risk | object | |
+| Overweight | float64 | |
+| Arthritis | object | |
+| Diabetes | object | |
+| Hyperlipidemia | object | |
+| BackPain | object | |
+| Anxiety | float64 | |
+| Allergic_rhinitis | object | |
+| Reflux_esophagitis | object | |
+| Asthma | object | |
+| Services | object | |
+| Initial_days | float64 | |
+| TotalCharge | float64 | |
+| Additional_charges | float64 | |
+| Item1 | int64 | |
+| Item2 | int64 | |
+| Item3 | int64 | |
+| Item4 | int64 | |
+| Item5 | int64 | |
+| Item6 | int64 | |
+| Item7 | int64 | |
+| Item8 | int64 | |
 
 ## Part II: Data-Cleaning Plan
 
