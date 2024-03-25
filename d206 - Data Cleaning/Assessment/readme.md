@@ -15,63 +15,6 @@ One question that could be addressed using this dataset is to determine what fac
 
 B.  Describe all variables in the data set (regardless of the research question) and indicate the data type for each variable. Use examples from the data set to support your claims.
 
-Dataset variables and data types for medical_raw_data.csv.
-| Column Name | Data Type | Description |
-|---|---|---|
-| Unnamed: 0 | int64 | |
-| CaseOrder | int64 | |
-| Customer_id | object | |
-| Interaction | object | |
-| UID | object | |
-| City | object | |
-| State | object | |
-| County | object | |
-| Zip | int64 | |
-| Lat | float64 | |
-| Lng | float64 | |
-| Population | int64 | |
-| Area | object | |
-| Timezone | object | |
-| Job | object | |
-| Children | float64 | |
-| Age | float64 | |
-| Education | object | |
-| Employment | object | |
-| Income | float64 | |
-| Marital | object | |
-| Gender | object | |
-| ReAdmis | object | |
-| VitD_levels | float64 | |
-| Doc_visits | int64 | |
-| Full_meals_eaten | int64 | |
-| VitD_supp | int64 | |
-| Soft_drink | object | |
-| Initial_admin | object | |
-| HighBlood | object | |
-| Stroke | object | |
-| Complication_risk | object | |
-| Overweight | float64 | |
-| Arthritis | object | |
-| Diabetes | object | |
-| Hyperlipidemia | object | |
-| BackPain | object | |
-| Anxiety | float64 | |
-| Allergic_rhinitis | object | |
-| Reflux_esophagitis | object | |
-| Asthma | object | |
-| Services | object | |
-| Initial_days | float64 | |
-| TotalCharge | float64 | |
-| Additional_charges | float64 | |
-| Item1 | int64 | |
-| Item2 | int64 | |
-| Item3 | int64 | |
-| Item4 | int64 | |
-| Item5 | int64 | |
-| Item6 | int64 | |
-| Item7 | int64 | |
-| Item8 | int64 | |
-
 ## Part II: Data-Cleaning Plan
 
 _Note: You may use Python or R for implementing your coding solutions, manipulating the data, and creating visual representations._
