@@ -1,0 +1,287 @@
+/* adding/importing missing services dataset from Postgres*/
+-- Table: public.services
+
+-- DROP TABLE IF EXISTS public.services;
+
+CREATE TABLE IF NOT EXISTS public.services
+(
+    customer_id text COLLATE pg_catalog."default" NOT NULL,
+    internetservice text COLLATE pg_catalog."default",
+    phone text COLLATE pg_catalog."default",
+    multiple text COLLATE pg_catalog."default",
+    onlinesecurity text,
+    onlinebackup text,
+    deviceprotection text COLLATE pg_catalog."default",
+    techsupport text,
+    CONSTRAINT services_pkey PRIMARY KEY (customer_id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.services
+    OWNER to postgres;
+
+/* adding a column for WGU data specification*/
+
+ALTER TABLE customer
+ADD COLUMN source text;
+UPDATE public.customer SET source = 'WGU';
+
+/* locating different gender types*/
+SELECT DISTINCT gender FROM customer;
+
+/* updating preferred not to answer to nonbinary*/
+UPDATE customer
+SET gender = 'NonBinary'
+WHERE gender = 'Prefer not to answer';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT techsupport FROM services;
+UPDATE services
+SET techsupport = 0
+WHERE techsupport = 'No internet service';
+UPDATE services
+SET techsupport = 0
+WHERE techsupport = 'No';
+UPDATE services
+SET techsupport = 1
+WHERE techsupport = 'Yes';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT onlinebackup  FROM services;
+UPDATE services
+SET onlinebackup  = 0
+WHERE onlinebackup  = 'No';
+UPDATE services
+SET onlinebackup = 1
+WHERE onlinebackup = 'Yes';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT deviceprotection FROM services;
+UPDATE services
+SET deviceprotection = 0
+WHERE deviceprotection = 'No';
+UPDATE services
+SET deviceprotection = 1
+WHERE deviceprotection = 'Yes';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT onlinesecurity FROM services;
+UPDATE services
+SET onlinesecurity = 0
+WHERE onlinesecurity = 'No';
+UPDATE services
+SET onlinesecurity = 1
+WHERE onlinesecurity= 'Yes';
+/* joining churn tables based on columns needed*/
+SELECT c.customer_id, l.city AS City, l.state as State, l.zip AS ZipCode, 
+c.lat AS Latitude, c.lng AS Longitude, c.churn as Churn, c.tenure as tenure,
+c.gender AS Gender, c.monthly_charge AS MonthlyCharge,
+s.internetservice, s.deviceprotection, s.onlinebackup, s.onlinesecurity, s.techsupport, c.source
+INTO TABLE wgu_temp
+FROM customer AS c
+JOIN services AS s ON c.customer_id = s.customer_id
+LEFT JOIN location AS l ON c.location_id = l.location_id;
+
+SELECT * 
+FROM wgu_temp;
+
+/*import telco_churn ibm dataset into postgresql*/
+
+-- Table: public.telco_churn
+
+-- DROP TABLE IF EXISTS public.telco_churn;
+
+CREATE TABLE IF NOT EXISTS public.telco_churn
+(
+    customerid text COLLATE pg_catalog."default" NOT NULL,
+    count integer,
+    country text COLLATE pg_catalog."default",
+    state text COLLATE pg_catalog."default",
+    city text COLLATE pg_catalog."default",
+    zipcode integer,
+    latitude numeric,
+    longitude numeric,
+    gender text COLLATE pg_catalog."default",
+    seniorcitizen text COLLATE pg_catalog."default",
+    partner text COLLATE pg_catalog."default",
+    dependent text COLLATE pg_catalog."default",
+    tenure numeric,
+    phone text COLLATE pg_catalog."default",
+    mulitple text COLLATE pg_catalog."default",
+    internetservice text COLLATE pg_catalog."default",
+    onlinesecurity text COLLATE pg_catalog."default",
+    onlinebackup text COLLATE pg_catalog."default",
+    deviceprotection text COLLATE pg_catalog."default",
+    techsupport text COLLATE pg_catalog."default",
+    streaming_tv text COLLATE pg_catalog."default",
+    streaming_movies text COLLATE pg_catalog."default",
+    contract text COLLATE pg_catalog."default",
+    paperless_billing text COLLATE pg_catalog."default",
+    payment_method text COLLATE pg_catalog."default",
+    monthly_charge numeric,
+    total_charges numeric,
+    churn text COLLATE pg_catalog."default",
+    churn_value numeric,
+    churn_score numeric,
+    cltv numeric,
+    churn_reason text COLLATE pg_catalog."default",
+	 CONSTRAINT services_pkey PRIMARY KEY (customerid)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.telco_churn
+    OWNER to postgres;
+
+
+/* adding a column for IBM data specification*/
+
+ALTER TABLE telco_churn
+ADD COLUMN source text;
+UPDATE public.telco_churn SET source = 'IBM';
+
+SELECT DISTINCT internetservice FROM telco_churn;
+
+/* updating no to none*/
+UPDATE telco_churn
+SET internetservice = ‘None’
+WHERE internetservice = 'No';
+
+/* updating spelling to match across both datasets*/
+UPDATE telco_churn
+SET internetservice = ‘Fiber Optic’
+WHERE internetservice = 'Fiber optic';
+
+/* updating the state to abbrev.*/
+UPDATE telco_churn
+SET state = ’CA’
+WHERE state = 'California';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT techsupport FROM telco_churn;
+UPDATE telco_churn
+SET techsupport = 0
+WHERE techsupport = 'No internet service';
+UPDATE telco_churn
+SET techsupport = 0
+WHERE techsupport = 'No';
+UPDATE telco_churn
+SET techsupport = 1
+WHERE techsupport = 'Yes';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT onlinebackup  FROM telco_churn;
+UPDATE telco_churn
+SET onlinebackup = 0
+WHERE onlinebackup = 'No internet service';
+UPDATE telco_churn
+SET onlinebackup  = 0
+WHERE onlinebackup  = 'No';
+UPDATE telco_churn
+SET onlinebackup = 1
+WHERE onlinebackup = 'Yes';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT deviceprotection FROM telco_churn;
+UPDATE telco_churn
+SET deviceprotection = 0
+WHERE deviceprotection = 'No internet service';
+UPDATE telco_churn
+SET deviceprotection = 0
+WHERE deviceprotection = 'No';
+UPDATE telco_churn
+SET deviceprotection = 1
+WHERE deviceprotection = 'Yes';
+
+/* updating yes/no to 1/0*/
+SELECT DISTINCT onlinesecurity FROM telco_churn;
+UPDATE telco_churn
+SET onlinesecurity = 0
+WHERE onlinesecurity = 'No internet service';
+UPDATE telco_churn
+SET onlinesecurity = 0
+WHERE onlinesecurity = 'No';
+UPDATE telco_churn
+SET onlinesecurity = 1
+WHERE onlinesecurity= 'Yes';
+
+/* making temp table pulling only columns needed*/
+SELECT customerid AS customer_id, city, state, zipcode, 
+latitude, longitude, churn, tenure,
+gender, monthly_charge AS MonthlyCharge,
+internetservice, deviceprotection, onlinebackup, onlinesecurity, techsupport, source
+INTO TABLE ibm_temp
+FROM telco_churn;
+
+SELECT * 
+FROM ibm_temp;
+
+--- CUSTOM SQL QUERY in Tableau for UNION ALL of wgu_temp and ibm_temp tables ---
+
+SELECT "t0"."Table Name" AS "Table Name",
+  "t0"."churn" AS "churn",
+  "t0"."city" AS "city",
+  "t0"."customer_id" AS "customer_id",
+  "t0"."deviceprotection" AS "deviceprotection",
+  "t0"."gender" AS "gender",
+  "t0"."internetservice" AS "internetservice",
+  "t0"."latitude" AS "latitude",
+  "t0"."longitude" AS "longitude",
+  "t0"."monthlycharge" AS "monthlycharge",
+  "t0"."onlinebackup" AS "onlinebackup",
+  "t0"."onlinesecurity" AS "onlinesecurity",
+  "t0"."source" AS "source",
+  "t0"."state" AS "state",
+  "t0"."techsupport" AS "techsupport",
+  "t0"."tenure" AS "tenure",
+  "t0"."zipcode" AS "zipcode"
+FROM (
+  
+  SELECT "t1"."Table Name" AS "Table Name", "t1"."churn" AS "churn", "t1"."city" AS "city", "t1"."customer_id" AS "customer_id", "t1"."deviceprotection" AS "deviceprotection", "t1"."gender" AS "gender", "t1"."internetservice" AS "internetservice", "t1"."latitude" AS "latitude", "t1"."longitude" AS "longitude", "t1"."monthlycharge" AS "monthlycharge", "t1"."onlinebackup" AS "onlinebackup", "t1"."onlinesecurity" AS "onlinesecurity", "t1"."source" AS "source", "t1"."state" AS "state", "t1"."techsupport" AS "techsupport", "t1"."tenure" AS "tenure", "t1"."zipcode" AS "zipcode"
+  FROM (
+    SELECT ('wgu_temp'::text) AS "Table Name",
+      CAST("wgu_temp"."churn" AS TEXT) AS "churn",
+      CAST("wgu_temp"."city" AS TEXT) AS "city",
+      CAST("wgu_temp"."customer_id" AS TEXT) AS "customer_id",
+      CAST("wgu_temp"."deviceprotection" AS TEXT) AS "deviceprotection",
+      CAST("wgu_temp"."gender" AS TEXT) AS "gender",
+      CAST("wgu_temp"."internetservice" AS TEXT) AS "internetservice",
+      "wgu_temp"."latitude" AS "latitude",
+      "wgu_temp"."longitude" AS "longitude",
+      "wgu_temp"."monthlycharge" AS "monthlycharge",
+      CAST("wgu_temp"."onlinebackup" AS TEXT) AS "onlinebackup",
+      CAST("wgu_temp"."onlinesecurity" AS TEXT) AS "onlinesecurity",
+      CAST("wgu_temp"."source" AS TEXT) AS "source",
+      CAST("wgu_temp"."state" AS TEXT) AS "state",
+      CAST("wgu_temp"."techsupport" AS TEXT) AS "techsupport",
+      "wgu_temp"."tenure" AS "tenure",
+      "wgu_temp"."zipcode" AS "zipcode"
+    FROM "public"."wgu_temp" "wgu_temp"
+  ) "t1"
+  
+   UNION  ALL 
+  
+  SELECT "t2"."Table Name" AS "Table Name", "t2"."churn" AS "churn", "t2"."city" AS "city", "t2"."customer_id" AS "customer_id", "t2"."deviceprotection" AS "deviceprotection", "t2"."gender" AS "gender", "t2"."internetservice" AS "internetservice", "t2"."latitude" AS "latitude", "t2"."longitude" AS "longitude", "t2"."monthlycharge" AS "monthlycharge", "t2"."onlinebackup" AS "onlinebackup", "t2"."onlinesecurity" AS "onlinesecurity", "t2"."source" AS "source", "t2"."state" AS "state", "t2"."techsupport" AS "techsupport", "t2"."tenure" AS "tenure", "t2"."zipcode" AS "zipcode"
+  FROM (
+    SELECT ('ibm_temp'::text) AS "Table Name",
+      CAST("ibm_temp"."churn" AS TEXT) AS "churn",
+      CAST("ibm_temp"."city" AS TEXT) AS "city",
+      CAST("ibm_temp"."customer_id" AS TEXT) AS "customer_id",
+      CAST("ibm_temp"."deviceprotection" AS TEXT) AS "deviceprotection",
+      CAST("ibm_temp"."gender" AS TEXT) AS "gender",
+      CAST("ibm_temp"."internetservice" AS TEXT) AS "internetservice",
+      "ibm_temp"."latitude" AS "latitude",
+      "ibm_temp"."longitude" AS "longitude",
+      "ibm_temp"."monthlycharge" AS "monthlycharge",
+      CAST("ibm_temp"."onlinebackup" AS TEXT) AS "onlinebackup",
+      CAST("ibm_temp"."onlinesecurity" AS TEXT) AS "onlinesecurity",
+      CAST("ibm_temp"."source" AS TEXT) AS "source",
+      CAST("ibm_temp"."state" AS TEXT) AS "state",
+      CAST("ibm_temp"."techsupport" AS TEXT) AS "techsupport",
+      "ibm_temp"."tenure" AS "tenure",
+      "ibm_temp"."zipcode" AS "zipcode"
+    FROM "public"."ibm_temp" "ibm_temp"
+  ) "t2"
+  
+) "t0"
